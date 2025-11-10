@@ -4,13 +4,11 @@ namespace TypesenseIndex\Helper;
 
 use TypesenseIndex\Helper\Options as Options;
 
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpClient\HttplugClient;
-
 class Index
 {
     private static $_collection = null;
     private static $_client = null;
+    private static $_canConnect = null;
 
     /**
      * Get the Typesense collection
@@ -116,11 +114,13 @@ class Index
             return self::$_client;
         }
 
-        // Create compliant HTTP client
-        $symfonyNative = HttpClient::create([
-            'timeout' => 2, // total timeout in seconds
-        ]);
-        $client = new HttplugClient($symfonyNative);
+        // Create HTTPlug client with timeout
+        $httpClient = new \Http\Adapter\Guzzle7\Client(
+            new \GuzzleHttp\Client([
+                'timeout' => 2,
+            ])
+        );
+        $client = $httpClient;
 
         // Create Typesense client configuration
         $config = [
@@ -203,7 +203,6 @@ class Index
             $collection->documents->delete(['filter_by' => 'blog_id:>0']);
             return true;
         } catch (\Exception $e) {
-            var_dump($e->getMessage());exit;
             return false;
         }
     }
@@ -233,13 +232,19 @@ class Index
      *
      * @return bool
      */
+
     public static function canConnect()
     {
+        // Return cached result if already checked
+        if (self::$_canConnect !== null) {
+            return self::$_canConnect;
+        }
+
         try {
             self::getClient()->health->retrieve();
-            return true;
+            return self::$_canConnect = true;
         } catch (\Exception $e) {
-            return false;
+            return self::$_canConnect = false;
         }
     }
 }

@@ -4,7 +4,7 @@
  * Plugin Name:       Typesense Index
  * Plugin URI:        https://github.com/michaelclaesson/typesense-index
  * Description:       Manages Typesense index
- * Version: 1.0.0
+ * Version:           1.0.1
  * Author:            Michael Claesson
  * Author URI:        https://github.com/michaelclaesson
  * License:           MIT
