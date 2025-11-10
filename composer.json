@@ -1,0 +1,38 @@
+{
+  "name": "alingsas-kommun/typesense-index",
+  "description": "Index Wordpress and Municipio site content to Typesense.",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alingsas Kommun",
+      "email": "it@alingsas.se"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "TypesenseIndex\\": "source/php/"
+    }
+  },
+  "version": "1.0.0",
+  "require": {
+    "php": ">=8.1",
+    "ext-dom": "*",
+    "ext-libxml": "*",
+    "php-http/curl-client": "^2.3",
+    "typesense/typesense-php": "^5.0",
+    "symfony/http-client": "^5.4"
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
+  },
+  "scripts": {
+    "typesenseServer": [
+      "Composer\\Config::disableProcessTimeout",
+      "docker-compose up"
+    ]
+  }
+}
